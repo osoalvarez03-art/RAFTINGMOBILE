@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaftingMobile | Celulares y Accesorios Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        
+        body { font-family: 'Inter', system_ui, sans-serif; }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
+        }
+        
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .product-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+        
+        .nav-link { position: relative; }
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover:after { width: 100%; }
+        
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(to right, #000, #000000);
+            z-index: 50;
+        }
+        
+        .hero-phone {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+
+        /* Texto debajo del iPhone - Mejorado */
+        .iphone-label {
+            animation: floatLabel 3.2s ease-in-out infinite;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        @keyframes floatLabel {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* Barra corrediza mejorada - ARREGLADA */
+        .marquee {
+            overflow: hidden;
+            background: #000000;
+            border-top: 1px solid #ffffff;
+            border-bottom: 1px solid #ffffff;
+        }
+        .marquee-content {
+            display: inline-flex;
+            gap: 3rem;
+            animation: marquee 40s linear infinite;
+            font-weight: 600;
+            padding-right: 3rem;
+            white-space: nowrap;
+        }
+        .marquee-content span {
+            display: inline-flex;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .section-title { font-family: 'Playfair Display', sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white overflow-x-hidden">
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="scroll-progress w-0"></div>
+
+    <!-- Navbar -->
+    <nav class="bg-black/90 backdrop-blur-lg fixed w-full z-50 border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <img src="https://i.ibb.co/b5S7rV6n/Logo-blanco.jpg" alt="RaftingMobile Logo" class="w-9 h-9 rounded-xl">
+                <div>
+                    <span class="text-2xl font-semibold tracking-tighter">RAFTING</span>
+                    <span class="text-2xl font-light tracking-tighter text-zinc-400">MOBILE</span>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-10 text-sm font-medium">
+                <a href="#iphone" class="nav-link text-white">iPhone</a>
+                <a href="#cargadores" class="nav-link text-white">Cargadores</a>
+                <a href="#audifonos" class="nav-link text-white">Audífonos</a>
+                <a href="#productos" class="nav-link text-white">Celulares</a>
+                <a href="#accesorios" class="nav-link text-white">Accesorios</a>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                <button onclick="toggleSearch()" class="text-xl hover:text-zinc-400 transition-colors">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button onclick="openCart()" class="text-xl hover:text-zinc-400 transition-colors relative">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-500 text-[10px] w-4 h-4 flex items-center justify-center rounded-full">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- BARRA CORREDIZA (Estilo Distribuidora Salvador) -->
+    <div class="marquee py-3 text-sm fixed top-[73px] w-full z-40">
+        <div class="marquee-content">
+            <span>🔥 Ofertas que no te puedes perder</span>
+            <span>💎 Los mejores precios del mercado</span>
+            <span>⭐ La mejor calidad garantizada</span>
+            <span>🚀 Envíos seguros a todo el país</span>
+            <span>🛡️ Garantía oficial de fábrica</span>
+            <span>🔥 Ofertas que no te puedes perder</span>
+            <span>💎 Los mejores precios del mercado</span>
+            <span>⭐ La mejor calidad garantizada</span>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center relative pt-32">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-5 py-2 rounded-3xl text-sm">
+                    <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    NUEVA LLEGADA
+                </div>
+                <h1 class="text-6xl md:text-7xl font-semibold leading-none tracking-tighter">El futuro<br>en tus manos</h1>
+                <p class="text-xl text-zinc-300 max-w-md">Descubre la nueva generación de celulares y accesorios premium.</p>
+                <button onclick="scrollToSection('productos')" class="bg-white text-black px-8 py-4 rounded-2xl font-semibold hover:bg-white/90 transition-all active:scale-95 flex items-center gap-3">
+                    Explorar Celulares <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+            
+            <!-- iPhone + Texto debajo -->
+            <div class="relative flex flex-col items-center justify-center cursor-pointer" onclick="scrollToSection('iphone')">
+                <img id="hero-phone" 
+                     src="https://i.ibb.co/7JYPWtVp/CITYPNG-COM-Orange-i-Phone-17-Pro-Max-Back-View-4000x4000.png" 
+                     class="hero-phone w-full max-w-lg drop-shadow-2xl rounded-3xl" alt="iPhone">
+                
+                <!-- Texto animado debajo del iPhone - MEJORADO -->
+                <div class="iphone-label mt-12 text-center">
+                    <div class="text-white text-3xl md:text-4xl font-bold tracking-tighter">iPhone 17 Pro Max</div>
+                    <div class="text-white-400 text-2xl md:text-2xl font-semibold mt-2">Desde $4.999.000</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secciones -->
+    <section id="iphone" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-emerald-400 text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">iPhone</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="iphone-grid"></div>
+        </div>
+    </section>
+
+    <section id="cargadores" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-emerald-400 text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Cargadores</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="cargadores-grid"></div>
+        </div>
+    </section>
+
+    <section id="audifonos" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-emerald-400 text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Audífonos</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="audifonos-grid"></div>
+        </div>
+    </section>
+
+    <section id="productos" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-emerald-400 text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Productos Destacados</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="productos-grid"></div>
+        </div>
+    </section>
+
+    <section id="accesorios" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-emerald-400 text-sm font-medium tracking-widest">ACCESORIOS</span>
+                <h2 class="section-title text-5xl font-semibold">Complementa tu experiencia</h2></div>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8" id="accesorios-grid"></div>
+        </div>
+    </section>
+
+    <!-- Modal Producto -->
+    <div id="product-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 rounded-3xl max-w-lg w-full mx-4 overflow-hidden">
+            <div class="p-6 border-b flex justify-between">
+                <h3 id="modal-title" class="text-2xl font-semibold"></h3>
+                <button onclick="closeProductModal()" class="text-4xl">×</button>
+            </div>
+            <div class="p-8">
+                <img id="modal-image" class="w-full rounded-2xl" alt="">
+                <p id="modal-price" class="text-3xl text-emerald-400 font-mono mt-4"></p>
+            </div>
+            <div class="p-6 border-t">
+                <button onclick="addCurrentToCart()" class="w-full bg-white text-black py-5 rounded-2xl font-semibold">Agregar al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carrito Modal -->
+    <div id="cart-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 rounded-3xl w-full max-w-lg mx-4">
+            <div class="p-6 border-b flex justify-between">
+                <h3 class="text-2xl font-semibold">Tu Carrito</h3>
+                <button onclick="closeCart()" class="text-3xl">×</button>
+            </div>
+            <div class="p-6 max-h-[50vh] overflow-auto" id="cart-items"></div>
+            <div class="p-6 border-t border-white/10">
+                <label class="block text-sm mb-3 font-medium">¿Cómo deseas recibir tu pedido?</label>
+                <div class="grid grid-cols-2 gap-3 mb-6">
+                    <button onclick="selectDelivery(0)" id="btn-tienda" class="delivery-btn py-4 rounded-2xl border-2 border-emerald-500">En Tienda</button>
+                    <button onclick="selectDelivery(1)" id="btn-domicilio" class="delivery-btn py-4 rounded-2xl border border-white/30">Domicilio</button>
+                </div>
+                <div id="domicilio-fields" class="hidden space-y-4">
+                    <input id="nombre" type="text" placeholder="Nombre completo" class="w-full bg-zinc-800 border border-white/20 rounded-2xl px-5 py-4">
+                    <input id="direccion" type="text" placeholder="Dirección completa" class="w-full bg-zinc-800 border border-white/20 rounded-2xl px-5 py-4">
+                    <input id="telefono" type="tel" placeholder="Teléfono" class="w-full bg-zinc-800 border border-white/20 rounded-2xl px-5 py-4">
+                </div>
+                <button onclick="finalizarCompra()" class="w-full bg-emerald-500 hover:bg-emerald-600 py-5 rounded-2xl font-semibold text-lg mt-4">
+                    Finalizar Pedido via WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner final -->
+    <div class="py-16 bg-black">
+        <div class="max-w-6xl mx-auto px-6">
+            
+        </div>
+    </div>
+
+    <script>
+        let cart = [];
+        let currentProduct = null;
+        let deliveryType = 0;
+
+        const allProducts = [
+            { id:1, nombre: "iPhone 17 Pro max Naranja", precio: 500000, img: "https://i.ibb.co/7JYPWtVp/CITYPNG-COM-Orange-i-Phone-17-Pro-Max-Back-View-4000x4000.png", categoria: "iphone" },
+            { id:2, nombre: "Cargador iPhone", precio: 70000, img: "https://i.ibb.co/YTZGdpbt/Cargador-iphone.jpg", categoria: "cargador" },
+            { id:3, nombre: "Cargador Tipo C Doble Negro", precio: 50000, img: "https://i.ibb.co/ZR6MqzyB/Cargador-negro-doble-C.jpg", categoria: "cargador" },
+            { id:4, nombre: "Cargador Tipo C Blanco", precio: 19999, img: "https://i.ibb.co/YTZGdpbt/Cargador-tipo-c-blanco.jpg", categoria: "cargador" },
+            { id:5, nombre: "Audífonos Premium", precio: 69999, img: "https://i.ibb.co/YTZGdpbt/Audifonos-premium.jpg", categoria: "audifonos" }
+        ];
+
+        function renderSection(sectionId, categoria) {
+            const filtered = allProducts.filter(p => p.categoria === categoria);
+            const container = document.getElementById(sectionId);
+            container.innerHTML = filtered.map(p => `
+                <div class="product-card bg-zinc-800 rounded-3xl overflow-hidden group cursor-pointer" onclick="showProduct(${p.id})">
+                    <div class="aspect-square bg-zinc-900 p-8 flex items-center justify-center">
+                        <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="font-semibold">${p.nombre}</div>
+                        <div class="text-emerald-400 font-mono">$${p.precio}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showProduct(id) {
+            currentProduct = allProducts.find(p => p.id === id);
+            document.getElementById('modal-title').textContent = currentProduct.nombre;
+            document.getElementById('modal-image').src = currentProduct.img;
+            document.getElementById('modal-price').textContent = `$${currentProduct.precio}`;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function addCurrentToCart() {
+            if (currentProduct) {
+                cart.push(currentProduct);
+                document.getElementById('cart-count').textContent = cart.length;
+                closeProductModal();
+            }
+        }
+
+        function openCart() {
+            const itemsDiv = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                itemsDiv.innerHTML = `<p class="text-center py-12 text-zinc-400">Tu carrito está vacío</p>`;
+            } else {
+                itemsDiv.innerHTML = cart.map((item, index) => `
+                    <div class="flex justify-between items-center py-4 border-b border-white/10">
+                        <div>
+                            <div>${item.nombre}</div>
+                            <div class="text-emerald-400">$${item.precio}</div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" class="text-red-500"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `).join('');
+            }
+            document.getElementById('cart-modal').classList.remove('hidden');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            document.getElementById('cart-count').textContent = cart.length;
+            openCart();
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.add('hidden');
+        }
+
+        function selectDelivery(type) {
+            deliveryType = type;
+            document.getElementById('btn-tienda').classList.toggle('border-emerald-500', type === 0);
+            document.getElementById('btn-tienda').classList.toggle('border-white/30', type !== 0);
+            document.getElementById('btn-domicilio').classList.toggle('border-emerald-500', type === 1);
+            document.getElementById('btn-domicilio').classList.toggle('border-white/30', type !== 1);
+            document.getElementById('domicilio-fields').classList.toggle('hidden', type === 0);
+        }
+
+        function finalizarCompra() {
+            if (cart.length === 0) {
+                alert("El carrito está vacío");
+                return;
+            }
+
+            let nombre = document.getElementById('nombre').value.trim() || "Cliente";
+            let direccion = document.getElementById('direccion').value.trim() || "No aplica";
+            let telefono = document.getElementById('telefono').value.trim() || "No proporcionado";
+
+            let mensaje = `Hola RaftingMobile!%0A%0A`;
+            mensaje += `🛒 *Nuevo Pedido*%0A%0A`;
+            mensaje += `👤 *Cliente:* ${nombre}%0A`;
+
+            if (deliveryType === 1) {
+                mensaje += `📍 *Entrega:* Domicilio%0A`;
+                mensaje += `📌 *Dirección:* ${direccion}%0A`;
+                mensaje += `📞 *Teléfono:* ${telefono}%0A%0A`;
+            } else {
+                mensaje += `📍 *Entrega:* En Tienda%0A%0A`;
+            }
+
+            mensaje += `🛍️ *Productos:*%0A`;
+
+            cart.forEach((item, index) => {
+                mensaje += `${index + 1}. ${item.nombre} - $${item.precio}%0A`;
+            });
+
+            const total = cart.reduce((sum, p) => sum + Number(p.precio), 0);
+            mensaje += `%0A💰 *Total:* $${total.toLocaleString()} COP`;
+
+            const numeroWhatsApp = "573023644171";
+
+            window.open(`https://wa.me/${numeroWhatsApp}?text=${mensaje}`, '_blank');
+
+            cart = [];
+            document.getElementById('cart-count').textContent = 0;
+            closeCart();
+            alert("✅ Pedido enviado por WhatsApp correctamente!");
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function toggleSearch() {
+            alert("🔍 Buscador próximamente...");
+        }
+
+        window.onload = function() {
+            renderSection('iphone-grid', 'iphone');
+            renderSection('cargadores-grid', 'cargador');
+            renderSection('audifonos-grid', 'audifonos');
+            renderProductos();
+            renderAccesorios();
+
+            const progressBar = document.getElementById('progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            });
+        };
+
+        function renderProductos() {
+            const container = document.getElementById('productos-grid');
+            container.innerHTML = allProducts.map(p => `
+                <div class="product-card bg-zinc-800 rounded-3xl overflow-hidden group cursor-pointer" onclick="showProduct(${p.id})">
+                    <div class="aspect-square bg-zinc-900 p-8 flex items-center justify-center">
+                        <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="p-6">
+                        <div class="font-semibold text-lg">${p.nombre}</div>
+                        <div class="text-emerald-400 font-mono">$${p.precio}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAccesorios() {
+            document.getElementById('accesorios-grid').innerHTML = `<p class="text-center text-zinc-400 py-12">Más accesorios próximamente...</p>`;
+        }
+    </script>
+</body>
+</html>
