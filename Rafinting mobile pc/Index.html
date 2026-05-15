@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RaftingMobile | Celulares y Accesorios Premium</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root{
+    --bg-main:#0A0A0A;
+    --bg-card:#1A1A1A;
+    --blue:#1E88E5;
+    --blue-dark:#0D47A1;
+    --green:#25D366;
+    --green-dark:#2E7D32;
+    --white:#FFFFFF;
+    --gray:#B0B0B0;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:var(--bg-main);
+    color:var(--white);
+}
+        
+.hero-bg{
+    background: linear-gradient(160deg, #000000 0%, #020510 40%, #060d1f 70%, #0a1628 100%);
+}
+        
+.product-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card:hover {
+    transform: translateY(-12px) scale(1.03);
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+}
+        
+.nav-link { position: relative; }
+.nav-link:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 0;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+.nav-link:hover:after { width: 100%; }
+        
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(to right, #000, #000000);
+    z-index: 50;
+}
+
+.hero-slider {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 650px;
+}
+
+.phone-slide {
+    position: absolute;
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+    transition: all 1.2s ease;
+    text-align: center;
+}
+
+.phone-slide.active {
+    opacity: 1;
+    transform: scale(1) translateY(0px);
+}
+
+.phone-slide img {
+    width: 100%;
+    max-width: 360px;
+    object-fit: contain;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.6)) drop-shadow(0 0 50px rgba(255,255,255,0.05));
+    animation: floating 5s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%,100%{ transform: translateY(0px); }
+    50%{ transform: translateY(-20px); }
+}
+
+.phone-info { margin-top: 30px; }
+.phone-info h2{ font-size:2.1rem; font-weight:700; letter-spacing:-1px; }
+.phone-info p { color: #a1a1aa; font-size: 1.2rem; margin-top: 10px; }
+
+.phone-badge {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 24px;
+    border-radius: 999px;
+    background: rgba(30,136,229,0.12);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.hero-glow{
+    position:absolute;
+    width:420px;
+    height:420px;
+    background: radial-gradient(circle, rgba(30,136,229,0.12), transparent 70%);
+    filter:blur(100px);
+    z-index:-1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-25px); }
+}
+
+.marquee{
+    overflow:hidden;
+    background:#111111;
+    border-top:1px solid rgba(255,255,255,0.06);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    backdrop-filter:blur(20px);
+}
+.marquee-track{
+    display:flex;
+    width:max-content;
+    animation:marquee 24s linear infinite;
+    will-change:transform;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-content{
+    display:flex;
+    align-items:center;
+    gap:4rem;
+    font-weight:500;
+    padding-right:4rem;
+    white-space:nowrap;
+    color:#D6D6D6;
+    letter-spacing:0.3px;
+}
+.marquee-icon{
+    width:26px;
+    height:26px;
+    min-width:26px;
+    object-fit:contain;
+    padding:4px;
+    border-radius:999px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    filter: drop-shadow(0 0 12px rgba(37,211,102,0.35));
+    transition:all .35s ease;
+}
+.marquee-content span{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
+    color:#DADADA;
+    font-size:14px;
+}
+.marquee-content span:hover .marquee-icon{
+    transform: translateY(-3px) scale(1.08);
+    filter: drop-shadow(0 0 18px rgba(37,211,102,0.7));
+}
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.section-title { font-family: 'Playfair Display', sans-serif; }
+
+/* ===================== CARRITO MEJORADO ===================== */
+
+#cart-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 200;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+#cart-modal.open {
+    display: flex;
+}
+
+#cart-panel {
+    width: 100%;
+    max-width: 480px;
+    background: #111111;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    box-shadow: -10px 0 60px rgba(0,0,0,0.6);
+    animation: slideIn 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* Scrollable content area */
+#cart-scrollable {
+    flex: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #333 transparent;
+}
+#cart-scrollable::-webkit-scrollbar { width: 4px; }
+#cart-scrollable::-webkit-scrollbar-thumb { background: #333; border-radius: 99px; }
+
+/* Cart item row */
+.cart-item-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.cart-item-thumb {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    border-radius: 12px;
+    object-fit: contain;
+    background: #1A1A1A;
+    padding: 6px;
+}
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.3; }
+.cart-item-price { font-size: 15px; font-weight: 700; color: #2E7D32; margin-top: 4px; }
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+.qty-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: #1A1A1A;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+    min-height: 44px; min-width: 44px;
+}
+.qty-btn:hover { background: #25D366; border-color: #25D366; color: #000; }
+.qty-num { font-size: 15px; font-weight: 600; min-width: 24px; text-align: center; }
+.cart-delete-btn {
+    background: none; border: none;
+    color: #ef4444;
+    font-size: 17px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s;
+    min-height: 44px; min-width: 44px;
+    display: flex; align-items: center; justify-content: center;
+}
+.cart-delete-btn:hover { background: rgba(239,68,68,0.1); }
+
+/* Resumen económico */
+#cart-summary {
+    margin: 0 20px;
+    background: #1A1A1A;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 0;
+}
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 15px;
+    color: #fff;
+}
+.summary-row.shipping { color: #B0B0B0; font-size: 13px; }
+.summary-row.total {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2E7D32;
+}
+.summary-row.total span:last-child { font-size: 22px; }
+
+/* Delivery buttons */
+.delivery-pill {
+    flex: 1;
+    padding: 14px 0;
+    border-radius: 99px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.25s;
+    min-height: 44px;
+}
+.delivery-pill.active {
+    border-color: #25D366;
+    background: rgba(37,211,102,0.08);
+}
+.delivery-note {
+    font-size: 12px;
+    color: #B0B0B0;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 16px;
+}
+
+/* Form fields */
+.cart-input {
+    width: 100%;
+    background: #1A1A1A;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #fff;
+    font-size: 15px;
+    min-height: 50px;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+    outline: none;
+}
+.cart-input:focus { border-color: #25D366; }
+.cart-input.error { border-color: #ef4444; }
+.field-error {
+    font-size: 12px;
+    color: #ef4444;
+    margin-top: 4px;
+    display: none;
+}
+.field-error.show { display: block; }
+
+/* Payment cards */
+.pay-card {
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: #1A1A1A;
+}
+.pay-card:hover { border-color: rgba(37,211,102,0.4); }
+.pay-card.selected {
+    border-color: #25D366;
+    background: rgba(37,211,102,0.06);
+}
+.pay-card-title { font-weight: 700; font-size: 15px; color: #fff; }
+.pay-card-desc { font-size: 12px; color: #B0B0B0; margin-top: 3px; }
+
+/* Trust badges */
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #B0B0B0;
+}
+.trust-icon { font-size: 18px; }
+
+/* Final button */
+#btn-finalizar {
+    width: 100%;
+    background: #25D366;
+    color: #000;
+    font-weight: 700;
+    font-size: 17px;
+    padding: 18px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s;
+    min-height: 60px;
+}
+#btn-finalizar:hover { background: #1da850; transform: scale(1.01); }
+
+/* Empty cart */
+#cart-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 30px;
+    text-align: center;
+    color: #B0B0B0;
+    gap: 16px;
+}
+#cart-empty i { font-size: 48px; color: #333; }
+#cart-empty p { font-size: 16px; }
+#btn-volver-tienda {
+    background: #25D366;
+    color: #000;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 99px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 8px;
+}
+
+/* Section labels inside cart */
+.cart-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #B0B0B0;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+/* Responsive mobile */
+@media (max-width: 520px) {
+    #cart-panel { max-width: 100%; }
+}
+/* ================= NAVBAR RESPONSIVE ================= */
+
+.nav-logo{
+    height:120px;
+    width:120px;
+    object-fit:contain;
+    flex-shrink:0;
+    margin:-30px -12px -30px -10px;
+    transition:all .3s ease;
+}
+
+.nav-brand{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    white-space:nowrap;
+}
+
+.brand-bold{
+    font-family:'Inter',sans-serif;
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:-0.5px;
+    color:#fff;
+}
+
+.brand-light{
+    font-family:'Inter',sans-serif;
+    font-size:22px;
+    font-weight:300;
+    letter-spacing:2px;
+    color:#B0B0B0;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 768px){
+
+    nav{
+        height:74px !important;
+        padding:0 10px !important;
+    }
+
+    .nav-logo{
+        height:82px;
+        width:82px;
+        margin:-16px -8px -16px -10px;
+    }
+
+    .brand-bold{
+        font-size:15px;
+    }
+
+    .brand-light{
+        font-size:15px;
+        letter-spacing:1px;
+    }
+
+    .marquee{
+        top:74px !important;
+    }
+
+    .hero-bg{
+        padding-top:120px !important;
+    }
+
+}
+html,body{ overflow-x:hidden; }
+/* ===== BUSCADOR MENU ===== */
+
+.menu-search{
+    position:relative;
+    margin-bottom:30px;
+}
+
+.menu-search input{
+    width:100%;
+    background:transparent;
+    border:2px solid rgba(255,255,255,0.15);
+    border-radius:999px;
+    padding:16px 54px 16px 22px;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    transition:all .3s ease;
+}
+
+.menu-search input:focus{
+    border-color:#25D366;
+    box-shadow:0 0 20px rgba(37,211,102,0.2);
+}
+
+.menu-search i{
+    position:absolute;
+    right:20px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#B0B0B0;
+    font-size:18px;
+}
+</style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="scroll-progress w-0"></div>
+
+    <!-- Navbar -->
+    <nav style="position:fixed; top:0; left:0; right:0; height:88px; background:rgba(10,10,10,0.96); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,0.08); z-index:500; display:flex; align-items:center; padding:0 14px; box-sizing:border-box;">
+    <div style="width:100%; display:flex; align-items:center; justify-content:space-between;
+gap:10px;">
+
+        <!-- IZQUIERDA: hamburger + logo + texto -->
+        <div style="display:flex; align-items:center; gap:4px;">
+            <button onclick="openMenu()" style="background:none; border:none; color:#fff; font-size:20px; cursor:pointer; padding:6px 10px 6px 0; display:flex; align-items:center; flex-shrink:0;">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a href="#" style="text-decoration:none; display:flex; align-items:center;">
+               <img 
+    src="https://i.ibb.co/xKkZcCs1/imagen-2026-05-14-203143273-removebg-preview-1.png"
+    alt="Logo"
+    class="nav-logo"
+>
+
+<div class="nav-brand">
+    <span class="brand-bold">RAFTING</span>
+    <span class="brand-light">MOBILE</span>
+</div>
+            </a>
+        </div>
+
+        <!-- DERECHA: carrito -->
+        <div style="flex-shrink:0;">
+            <button onclick="openCart()"
+                style="background:none; border:none; color:#fff; font-size:24px; cursor:pointer; padding:6px 8px; position:relative; display:flex; align-items:center; justify-content:center;"
+                onmouseover="this.style.color='#25D366'" onmouseout="this.style.color='#fff'">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span id="cart-count" style="position:absolute; top:-4px; right:2px; background:#25D366; color:#000; font-size:9px; font-weight:700; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center;">0</span>
+            </button>
+        </div>
+
+    </div>
+</nav>
+
+    <!-- BARRA CORREDIZA -->
+    <div class="marquee py-3 text-sm fixed top-[88px] w-full z-40">
+        <div class="marquee-track">
+            <div class="marquee-content">
+                <span><img src="img/icon-offers.png" class="marquee-icon" alt="">Las mejores ofertas</span>
+                <span><img src="img/icon-delivery.png" class="marquee-icon" alt="">Env&iacute;os a todo el pa&iacute;s</span>
+                <span><img src="img/icon-shield.png" class="marquee-icon" alt="">Garant&iacute;a oficial</span>
+                <span><img src="img/icon-payment.png" class="marquee-icon" alt="">Pagos seguros</span>
+                <span><img src="img/icon-star.png" class="marquee-icon" alt="">Calidad premium</span>
+                <span><img src="img/icon-price.png" class="marquee-icon" alt="">Precios especiales</span>
+                <span><img src="img/icon-fast.png" class="marquee-icon" alt="">Entrega r&aacute;pida</span>
+                <span><img src="img/icon-accessories.png" class="marquee-icon" alt="">Accesorios originales</span>
+                <span><img src="img/icon-support.png" class="marquee-icon" alt="">Asesor&iacute;a personalizada</span>
+            </div>
+            <div class="marquee-content" aria-hidden="true">
+                <span><img src="img/icon-offers.png" class="marquee-icon" alt="">Tecnología premium</span>
+                <span><img src="img/icon-delivery.png" class="marquee-icon" alt="">Env&iacute;os a todo el pa&iacute;s</span>
+                <span><img src="img/icon-shield.png" class="marquee-icon" alt="">Garantía y respaldo</span>
+                <span><img src="img/icon-payment.png" class="marquee-icon" alt="">Pagos seguros</span>
+                <span><img src="img/icon-star.png" class="marquee-icon" alt="">Equipos certificados</span>
+                <span><img src="img/icon-price.png" class="marquee-icon" alt="">Atención personalizada</span>
+                <span><img src="img/icon-fast.png" class="marquee-icon" alt="">Envíos nacionales</span>
+                <span><img src="img/icon-accessories.png" class="marquee-icon" alt="">Accesorios originales</span>
+                <span><img src="img/icon-support.png" class="marquee-icon" alt="">Asesor&iacute;a personalizada</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-screen flex items-center relative" style="padding-top:136px;">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-8">
+                <h1 class="text-5xl md:text-6xl font-bold leading-[1.05] tracking-tight max-w-xl">Tu tienda de tecnología<br>de confianza</h1>
+                <p class="text-[16px] text-[#B0B0B0] max-w-lg leading-7">Asesoría personalizada y productos originales. 16 años vendiendo experiencias positivas.</p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://wa.me/573023644171?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quisiera%20cotizar" target="_blank" rel="noopener noreferrer" class="group relative overflow-hidden bg-white text-black px-10 py-4 rounded-full text-[15px] font-semibold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(255,255,255,0.22)] flex items-center justify-center gap-2">
+                        <span class="relative z-10">Cotiza ahora →</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-white via-zinc-100 to-white opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                    </a>
+                    <button onclick="scrollToSection('iphone')" class="bg-transparent text-white px-10 py-4 rounded-full text-[15px] font-semibold tracking-wide border border-white/60 transition-all duration-300 hover:bg-white/10 hover:border-white flex items-center justify-center gap-2">
+                        Ver catálogo
+                    </button>
+                </div>
+            </div>
+            <!-- HERO APPLE SLIDER -->
+            <div class="hero-slider cursor-pointer" onclick="scrollToSection('iphone')">
+                <div class="hero-glow"></div>
+                <div class="phone-slide active">
+                    <img src="https://i.ibb.co/7JYPWtVp/CITYPNG-COM-Orange-i-Phone-17-Pro-Max-Back-View-4000x4000.png">
+                    <div class="phone-info"><h2>iPhone 17 Pro Max</h2><p>Desde $4.999.000</p><div class="phone-badge">NUEVO</div></div>
+                </div>
+                <div class="phone-slide">
+                    <img src="https://i.ibb.co/4gpKtrbV/i-Phone-15-Pro-Max-Black-Premium-Smartphone-PNG-Transparent-Luxurious-Design.png">
+                    <div class="phone-info"><h2>iPhone 15 Pro Max</h2><p>Usados Premium Certificados</p><div class="phone-badge">USADO</div></div>
+                </div>
+                <div class="phone-slide">
+                    <img src="https://i.ibb.co/rK90dSvX/i-Phone-16-and-i-Phone-16-Plus-PNG.png">
+                    <div class="phone-info"><h2>iPhone 16 Plus</h2><p>Nueva generación Apple</p><div class="phone-badge">NUEVO</div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secciones -->
+    <section id="iphone" class="py-24 bg-[#1A1A1A]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-[#25D366] medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">iPhone</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="iphone-grid"></div>
+        </div>
+    </section>
+
+    <section id="cargadores" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-[#25D366] text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Cargadores</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="cargadores-grid"></div>
+        </div>
+    </section>
+
+    <section id="audifonos" class="py-24 bg-[#1A1A1A]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-[#25D366] text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Audífonos</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="audifonos-grid"></div>
+        </div>
+    </section>
+
+    <section id="productos" class="py-24 bg-[#1A1A1A]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-[#25D366] text-sm font-medium tracking-widest">CATÁLOGO</span>
+                <h2 class="section-title text-5xl font-semibold">Productos Destacados</h2></div>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8" id="productos-grid"></div>
+        </div>
+    </section>
+
+    <section id="accesorios" class="py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-12">
+                <div><span class="text-[#25D366] text-sm font-medium tracking-widest">ACCESORIOS</span>
+                <h2 class="section-title text-5xl font-semibold">Complementa tu experiencia</h2></div>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8" id="accesorios-grid"></div>
+        </div>
+    </section>
+
+    <!-- Modal Producto -->
+    <div id="product-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-lg z-[100] flex items-center justify-center">
+        <div class="bg-[#1A1A1A] rounded-3xl max-w-lg w-full mx-4 overflow-hidden">
+            <div class="p-6 border-b flex justify-between">
+                <h3 id="modal-title" class="text-2xl font-semibold"></h3>
+                <button onclick="closeProductModal()" class="text-4xl">×</button>
+            </div>
+            <div class="p-8">
+                <img id="modal-image" class="w-full rounded-2xl" alt="">
+                <p id="modal-price" class="text-3xl text-[#25D366] font-mono mt-4"></p>
+            </div>
+            <div class="p-6 border-t">
+                <button onclick="addCurrentToCart()" class="w-full bg-white text-black py-5 rounded-2xl font-semibold">Agregar al Carrito</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================== CARRITO LATERAL MEJORADO ===================== -->
+    <div id="cart-modal" onclick="handleCartOverlayClick(event)">
+        <div id="cart-panel">
+
+            <!-- BLOQUE 1: Encabezado -->
+            <div style="padding:20px 24px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:space-between; flex-shrink:0;">
+                <h3 style="font-size:28px; font-weight:700; color:#fff; margin:0;">Tu Carrito</h3>
+                <button onclick="closeCart()" style="background:none;border:none;color:#fff;font-size:28px;cursor:pointer;line-height:1;padding:4px 10px;border-radius:8px;" aria-label="Cerrar">×</button>
+            </div>
+
+            <!-- ÁREA SCROLLABLE -->
+            <div id="cart-scrollable">
+
+                <!-- Carrito vacío -->
+                <div id="cart-empty" style="display:none;">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <p>Tu carrito está vacío</p>
+                    <button id="btn-volver-tienda" onclick="closeCart()">Volver a la tienda</button>
+                </div>
+
+                <!-- Contenido del carrito -->
+                <div id="cart-content">
+
+                    <!-- BLOQUE 2: Lista de productos -->
+                    <div id="cart-items-list"></div>
+
+                    <!-- BLOQUE 3: Resumen económico -->
+                    <div style="padding:16px 20px;">
+                        <div id="cart-summary">
+                            <div class="summary-row">
+                                <span>Subtotal de productos</span>
+                                <span id="summary-subtotal">$0</span>
+                            </div>
+                            <div class="summary-row shipping">
+                                <span>Costo de envío</span>
+                                <span>Se coordina por WhatsApp</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>TOTAL A PAGAR</span>
+                                <span id="summary-total">$0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 4: Forma de entrega -->
+                    <div style="padding:8px 20px 16px;">
+                        <p class="cart-section-label">¿Cómo deseas recibir tu pedido?</p>
+                        <div style="display:flex;gap:12px;">
+                            <button class="delivery-pill active" id="btn-tienda" onclick="selectDelivery(0)">En Tienda</button>
+                            <button class="delivery-pill" id="btn-domicilio" onclick="selectDelivery(1)">Domicilio</button>
+                        </div>
+                        <p class="delivery-note" id="delivery-note">Recoge en C.C. Diamante 1, Cali. Horario: Lunes a Sábado 9am - 7pm</p>
+                    </div>
+
+                    <!-- BLOQUE 5: Datos del cliente -->
+                    <div style="padding:8px 20px 16px;">
+                        <p class="cart-section-label">Tus datos</p>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <div>
+                                <input class="cart-input" id="f-nombre" type="text" placeholder="Nombre completo *">
+                                <p class="field-error" id="err-nombre">Este campo es obligatorio</p>
+                            </div>
+                            <div>
+                                <input class="cart-input" id="f-cedula" type="text" placeholder="Cédula o documento de identidad *">
+                                <p class="field-error" id="err-cedula">Este campo es obligatorio</p>
+                            </div>
+                            <div>
+                                <input class="cart-input" id="f-telefono" type="tel" placeholder="Teléfono / WhatsApp *">
+                                <p class="field-error" id="err-telefono">Este campo es obligatorio</p>
+                            </div>
+                            <div>
+                                <input class="cart-input" id="f-email" type="email" placeholder="Correo electrónico *">
+                                <p class="field-error" id="err-email">Este campo es obligatorio</p>
+                            </div>
+                            <div>
+                                <input class="cart-input" id="f-ciudad" type="text" placeholder="Ciudad *">
+                                <p class="field-error" id="err-ciudad">Este campo es obligatorio</p>
+                            </div>
+                            <!-- Solo si domicilio -->
+                            <div id="domicilio-fields" style="display:none;flex-direction:column;gap:10px;">
+                                <div>
+                                    <input class="cart-input" id="f-direccion" type="text" placeholder="Dirección completa *">
+                                    <p class="field-error" id="err-direccion">Este campo es obligatorio</p>
+                                </div>
+                                <div>
+                                    <input class="cart-input" id="f-barrio" type="text" placeholder="Barrio o punto de referencia *">
+                                    <p class="field-error" id="err-barrio">Este campo es obligatorio</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 6: Método de pago -->
+                    <div style="padding:8px 20px 16px;">
+                        <p class="cart-section-label">¿Cómo deseas pagar?</p>
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <div class="pay-card" id="pay-bold" onclick="selectPayment('Bold')">
+                                <div class="pay-card-title">💳 Bold</div>
+                                <div class="pay-card-desc">Recibe un link seguro de pago por WhatsApp. Acepta todas las tarjetas.</div>
+                            </div>
+                            <div class="pay-card" id="pay-nequi" onclick="selectPayment('Nequi')">
+                                <div class="pay-card-title">📱 Nequi</div>
+                                <div class="pay-card-desc">Transferencia directa desde la app Nequi.</div>
+                            </div>
+                            <div class="pay-card" id="pay-daviplata" onclick="selectPayment('Daviplata')">
+                                <div class="pay-card-title">📲 Daviplata</div>
+                                <div class="pay-card-desc">Transferencia directa desde la app Daviplata.</div>
+                            </div>
+                            <div class="pay-card" id="pay-bancolombia" onclick="selectPayment('Bancolombia')">
+                                <div class="pay-card-title">🏦 Bancolombia</div>
+                                <div class="pay-card-desc">Transferencia desde cuenta Bancolombia o PSE.</div>
+                            </div>
+                        </div>
+                        <p class="field-error" id="err-pago" style="margin-top:8px;">Selecciona un método de pago</p>
+                    </div>
+
+                    <!-- BLOQUE 7: Elementos de confianza -->
+                    <div style="padding:8px 20px 16px; background:rgba(37,211,102,0.04); margin:0 20px; border-radius:16px; margin-bottom:16px;">
+                        <div style="display:flex;flex-direction:column;gap:10px;">
+                            <div class="trust-badge"><span class="trust-icon">🔒</span><span>Tus datos están protegidos</span></div>
+                            <div class="trust-badge"><span class="trust-icon">✅</span><span>Empresa formalmente registrada</span></div>
+                            <div class="trust-badge"><span class="trust-icon">📄</span><span>Factura legal incluida</span></div>
+                        </div>
+                    </div>
+
+                    <!-- BLOQUE 8: Botón final -->
+                    <div style="padding:0 20px 32px;">
+                        <button id="btn-finalizar" onclick="finalizarCompra()">
+                            <i class="fa-brands fa-whatsapp" style="margin-right:8px;"></i>
+                            Finalizar Pedido vía WhatsApp
+                        </button>
+                        <p style="text-align:center;font-size:12px;color:#B0B0B0;margin-top:10px;">
+                            Confirmamos tu pedido y coordinamos el pago por WhatsApp
+                        </p>
+                    </div>
+
+                </div><!-- /cart-content -->
+            </div><!-- /cart-scrollable -->
+        </div><!-- /cart-panel -->
+    </div><!-- /cart-modal -->
+
+    <!-- Banner final -->
+    <div class="py-16 bg-black">
+        <div class="max-w-6xl mx-auto px-6"></div>
+    </div>
+
+    <script>
+        // ===================== ESTADO GLOBAL =====================
+        let cart = []; // [{id, nombre, precio, img, cantidad}]
+        let currentProduct = null;
+        let deliveryType = 0; // 0=tienda, 1=domicilio
+        let selectedPayment = '';
+
+        const WHATSAPP_NUMBER = "573023644171";
+
+        // ===================== PRODUCTOS =====================
+        const allProducts = [
+            { id:1, nombre: "iPhone 17 Pro max Naranja", precio: 500000, img: "https://i.ibb.co/7JYPWtVp/CITYPNG-COM-Orange-i-Phone-17-Pro-Max-Back-View-4000x4000.png", categoria: "iphone" },
+            { id:2, nombre: "Cargador iPhone", precio: 70000, img: "https://i.ibb.co/YTZGdpbt/Cargador-iphone.jpg", categoria: "cargador" },
+            { id:3, nombre: "Cargador Tipo C Doble Negro", precio: 50000, img: "https://i.ibb.co/ZR6MqzyB/Cargador-negro-doble-C.jpg", categoria: "cargador" },
+            { id:4, nombre: "Cargador Tipo C Blanco", precio: 19999, img: "https://i.ibb.co/YTZGdpbt/Cargador-tipo-c-blanco.jpg", categoria: "cargador" },
+            { id:5, nombre: "Audífonos Premium", precio: 69999, img: "https://i.ibb.co/YTZGdpbt/Audifonos-premium.jpg", categoria: "audifonos" }
+        ];
+
+        // ===================== PERSISTENCIA localStorage =====================
+        function saveCart() {
+            try { localStorage.setItem('rafting_cart', JSON.stringify(cart)); } catch(e){}
+        }
+        function loadCart() {
+            try {
+                const saved = localStorage.getItem('rafting_cart');
+                if (saved) cart = JSON.parse(saved);
+            } catch(e){ cart = []; }
+        }
+
+        // ===================== RENDER CATÁLOGO =====================
+        function searchProducts() {
+            const value = document.getElementById("search-input").value.toLowerCase();
+            const cards = document.querySelectorAll(".product-card");
+            cards.forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(value) ? "block" : "none";
+            });
+        }
+
+        function renderSection(sectionId, categoria) {
+            const filtered = allProducts.filter(p => p.categoria === categoria);
+            const container = document.getElementById(sectionId);
+            container.innerHTML = filtered.map(p => `
+                <div class="product-card bg-[#1A1A1A] rounded-3xl overflow-hidden group cursor-pointer" onclick="showProduct(${p.id})">
+                    <div class="aspect-square bg-[#1A1A1A] p-8 flex items-center justify-center">
+                        <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" alt="${p.nombre}">
+                    </div>
+                    <div class="p-6">
+                        <div class="font-semibold">${p.nombre}</div>
+                        <div class="text-[#25D366] font-mono">$${p.precio.toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderProductos() {
+            const container = document.getElementById('productos-grid');
+            container.innerHTML = allProducts.map(p => `
+                <div class="product-card bg-[#1A1A1A] rounded-3xl overflow-hidden group cursor-pointer" onclick="showProduct(${p.id})">
+                    <div class="aspect-square bg-[#1A1A1A] p-8 flex items-center justify-center">
+                        <img src="${p.img}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500" alt="${p.nombre}">
+                    </div>
+                    <div class="p-6">
+                        <div class="font-semibold text-lg">${p.nombre}</div>
+                        <div class="text-[#25D366] font-mono">$${p.precio.toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderAccesorios() {
+            document.getElementById('accesorios-grid').innerHTML = `<p class="text-center text-zinc-400 py-12">Más accesorios próximamente...</p>`;
+        }
+
+        // ===================== MODAL PRODUCTO =====================
+        function showProduct(id) {
+            currentProduct = allProducts.find(p => p.id === id);
+            document.getElementById('modal-title').textContent = currentProduct.nombre;
+            document.getElementById('modal-image').src = currentProduct.img;
+            document.getElementById('modal-price').textContent = `$${currentProduct.precio.toLocaleString()}`;
+            document.getElementById('product-modal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+        }
+
+        function addCurrentToCart() {
+            if (!currentProduct) return;
+            const existing = cart.find(i => i.id === currentProduct.id);
+            if (existing) {
+                existing.cantidad++;
+            } else {
+                cart.push({ ...currentProduct, cantidad: 1 });
+            }
+            updateCartCount();
+            saveCart();
+            closeProductModal();
+            // Feedback visual
+            showAddedFeedback();
+        }
+
+        function showAddedFeedback() {
+            const btn = document.querySelector('#cart-count');
+            btn.style.transform = 'scale(1.5)';
+            setTimeout(() => btn.style.transform = 'scale(1)', 300);
+        }
+
+        // ===================== CARRITO =====================
+        function updateCartCount() {
+            const total = cart.reduce((s, i) => s + i.cantidad, 0);
+            document.getElementById('cart-count').textContent = total;
+        }
+
+        function openCart() {
+            renderCartItems();
+            document.getElementById('cart-modal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function handleCartOverlayClick(e) {
+            if (e.target === document.getElementById('cart-modal')) closeCart();
+        }
+
+        function renderCartItems() {
+            const isEmpty = cart.length === 0;
+            document.getElementById('cart-empty').style.display = isEmpty ? 'flex' : 'none';
+            document.getElementById('cart-content').style.display = isEmpty ? 'none' : 'block';
+
+            if (isEmpty) return;
+
+            // Render items
+            const list = document.getElementById('cart-items-list');
+            list.innerHTML = cart.map((item, idx) => `
+                <div class="cart-item-row">
+                    <img class="cart-item-thumb" src="${item.img}" alt="${item.nombre}">
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${item.nombre}</div>
+                        <div class="cart-item-price">$${(item.precio * item.cantidad).toLocaleString()}</div>
+                        <div class="qty-control">
+                            <button class="qty-btn" onclick="changeQty(${idx}, -1)" aria-label="Disminuir">−</button>
+                            <span class="qty-num">${item.cantidad}</span>
+                            <button class="qty-btn" onclick="changeQty(${idx}, 1)" aria-label="Aumentar">+</button>
+                        </div>
+                    </div>
+                    <button class="cart-delete-btn" onclick="removeFromCart(${idx})" aria-label="Eliminar"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            `).join('');
+
+            updateSummary();
+        }
+
+        function changeQty(idx, delta) {
+            cart[idx].cantidad += delta;
+            if (cart[idx].cantidad < 1) {
+                cart.splice(idx, 1);
+            }
+            updateCartCount();
+            saveCart();
+            renderCartItems();
+        }
+
+        function removeFromCart(idx) {
+            cart.splice(idx, 1);
+            updateCartCount();
+            saveCart();
+            renderCartItems();
+        }
+
+        function updateSummary() {
+            const subtotal = cart.reduce((s, i) => s + i.precio * i.cantidad, 0);
+            document.getElementById('summary-subtotal').textContent = '$' + subtotal.toLocaleString();
+            document.getElementById('summary-total').textContent = '$' + subtotal.toLocaleString();
+        }
+
+        // ===================== ENTREGA =====================
+        function selectDelivery(type) {
+            deliveryType = type;
+            document.getElementById('btn-tienda').classList.toggle('active', type === 0);
+            document.getElementById('btn-domicilio').classList.toggle('active', type === 1);
+            
+            const note = document.getElementById('delivery-note');
+            const domFields = document.getElementById('domicilio-fields');
+            
+            if (type === 0) {
+                note.textContent = 'Recoge en C.C. Diamante 1, Cali. Horario: Lunes a Sábado 9am - 7pm';
+                domFields.style.display = 'none';
+            } else {
+                note.textContent = 'El costo y tiempo de envío se coordinan por WhatsApp según tu ciudad';
+                domFields.style.display = 'flex';
+            }
+        }
+
+        // ===================== MÉTODO DE PAGO =====================
+        function selectPayment(method) {
+            selectedPayment = method;
+            ['Bold','Nequi','Daviplata','Bancolombia'].forEach(m => {
+                document.getElementById('pay-' + m.toLowerCase()).classList.toggle('selected', m === method);
+            });
+            document.getElementById('err-pago').classList.remove('show');
+        }
+
+        // ===================== VALIDACIÓN =====================
+        function validateField(id, errId, condition) {
+            const input = document.getElementById(id);
+            const err = document.getElementById(errId);
+            const invalid = condition(input.value.trim());
+            input.classList.toggle('error', invalid);
+            err.classList.toggle('show', invalid);
+            return !invalid;
+        }
+
+        function validateAll() {
+            let valid = true;
+
+            valid = validateField('f-nombre', 'err-nombre', v => !v) && valid;
+            valid = validateField('f-cedula', 'err-cedula', v => !v) && valid;
+            valid = validateField('f-telefono', 'err-telefono', v => !v) && valid;
+            valid = validateField('f-email', 'err-email', v => !v) && valid;
+            valid = validateField('f-ciudad', 'err-ciudad', v => !v) && valid;
+
+            if (deliveryType === 1) {
+                valid = validateField('f-direccion', 'err-direccion', v => !v) && valid;
+                valid = validateField('f-barrio', 'err-barrio', v => !v) && valid;
+            }
+
+            if (!selectedPayment) {
+                document.getElementById('err-pago').classList.add('show');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        // ===================== FINALIZAR COMPRA =====================
+        function finalizarCompra() {
+            if (cart.length === 0) {
+                alert("El carrito está vacío");
+                return;
+            }
+            if (!validateAll()) {
+                // Scroll al primer error
+                const firstErr = document.querySelector('.cart-input.error');
+                if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            const nombre   = document.getElementById('f-nombre').value.trim();
+            const cedula   = document.getElementById('f-cedula').value.trim();
+            const telefono = document.getElementById('f-telefono').value.trim();
+            const email    = document.getElementById('f-email').value.trim();
+            const ciudad   = document.getElementById('f-ciudad').value.trim();
+            const direccion = deliveryType === 1 ? document.getElementById('f-direccion').value.trim() : '';
+            const barrio    = deliveryType === 1 ? document.getElementById('f-barrio').value.trim() : '';
+
+            let msg = `Hola Rafting Mobile, quiero realizar este pedido:\n\n`;
+            msg += `🛒 PRODUCTOS:\n`;
+            let subtotal = 0;
+            cart.forEach(item => {
+                const line = item.precio * item.cantidad;
+                subtotal += line;
+                msg += `• ${item.cantidad} x ${item.nombre} - $${item.precio.toLocaleString()}\n`;
+            });
+            msg += `\n💰 SUBTOTAL: $${subtotal.toLocaleString()}\n`;
+            msg += `\n📍 ENTREGA: ${deliveryType === 0 ? 'En Tienda' : 'Domicilio'}\n`;
+            if (deliveryType === 1) {
+                msg += `Dirección: ${direccion}\n`;
+                msg += `Barrio: ${barrio}\n`;
+                msg += `Ciudad: ${ciudad}\n`;
+            }
+            msg += `\n👤 MIS DATOS:\n`;
+            msg += `Nombre: ${nombre}\n`;
+            msg += `Cédula: ${cedula}\n`;
+            msg += `Teléfono: ${telefono}\n`;
+            msg += `Correo: ${email}\n`;
+            msg += `Ciudad: ${ciudad}\n`;
+            msg += `\n💳 MÉTODO DE PAGO ELEGIDO: ${selectedPayment}\n`;
+            msg += `\nQuedo atento(a) para coordinar el envío y el pago. ¡Gracias!`;
+
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+
+            // Limpiar
+            cart = [];
+            saveCart();
+            updateCartCount();
+            closeCart();
+        }
+
+        // ===================== NAVEGACIÓN =====================
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openMenu(){
+            document.getElementById('side-menu').classList.remove('-translate-x-full');
+            document.getElementById('menu-overlay').classList.remove('hidden');
+        }
+        function closeMenu(){
+            document.getElementById('side-menu').classList.add('-translate-x-full');
+            document.getElementById('menu-overlay').classList.add('hidden');
+        }
+
+        function toggleSearch() {
+            const input = document.getElementById('search-input');
+            input.classList.toggle('hidden');
+            if (!input.classList.contains('hidden')) input.focus();
+        }
+
+        // Búsqueda móvil
+        function toggleMobileSearch() {
+            const bar = document.getElementById('mobile-search-bar');
+            const ticker = document.querySelector('.marquee');
+            if (bar.style.display === 'none' || bar.style.display === '') {
+                bar.style.display = 'block';
+                // Empuja el ticker hacia abajo
+                ticker.style.top = '132px';
+                document.getElementById('search-input-mobile').focus();
+            } else {
+                bar.style.display = 'none';
+                ticker.style.top = '88px';
+            }
+        }
+
+        function searchProductsMobile() {
+            const value = document.getElementById('search-input-mobile').value.toLowerCase();
+            const cards = document.querySelectorAll('.product-card');
+            cards.forEach(card => {
+                card.style.display = card.innerText.toLowerCase().includes(value) ? 'block' : 'none';
+            });
+        }
+
+        // ===================== HERO SLIDER =====================
+        const slides = document.querySelectorAll('.phone-slide');
+        let currentSlide = 0;
+        function changeSlide(){
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+        setInterval(changeSlide, 3500);
+
+        // ===================== INIT =====================
+        window.onload = function() {
+            loadCart();
+            updateCartCount();
+            renderSection('iphone-grid', 'iphone');
+            renderSection('cargadores-grid', 'cargador');
+            renderSection('audifonos-grid', 'audifonos');
+            renderProductos();
+            renderAccesorios();
+
+            const progressBar = document.getElementById('progress-bar');
+            window.addEventListener('scroll', () => {
+                const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+                progressBar.style.width = scrollPercent + '%';
+            });
+        };
+    </script>
+
+    <!-- SIDEBAR -->
+    <div id="side-menu" class="fixed top-0 -translate-x-full w-[320px] h-full bg-[#0A0A0A]/95 backdrop-blur-2xl z-[100] transition-all duration-500 overflow-y-auto">
+        <div class="p-6 border-b border-white/10 flex items-center justify-between">
+            <h2 class="text-2xl font-bold">Menú</h2>
+            <button onclick="closeMenu()" class="text-4xl">×</button>
+        </div>
+        <div class="p-6 space-y-10">
+            <!-- BUSCADOR -->
+<div class="menu-search">
+    <input 
+        type="text"
+        id="search-input"
+        placeholder="Buscar productos..."
+        onkeyup="searchProducts()"
+    >
+    <i class="fa-solid fa-magnifying-glass"></i>
+</div>
+            <div>
+                <h3 class="text-[#1E88E5] font-bold text-sm mb-4 tracking-widest">TELEFONÍA</h3>
+                <div class="space-y-3 text-[#B0B0B0] text-sm">
+                    <p>Equipos nuevos</p>
+                    <p>Usados en perfecto estado</p>
+                    <p>Tabletas - iPads</p>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-[#1E88E5] font-bold text-sm mb-4 tracking-widest">ACCESORIOS ORIGINALES</h3>
+                <div class="space-y-3 text-[#B0B0B0] text-sm">
+                    <p>Apple Watch</p>
+                    <p>AirPods</p>
+                    <p>Cargadores</p>
+                    <p>Audífonos</p>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-[#1E88E5] font-bold text-sm mb-4 tracking-widest">PROTECTORES</h3>
+                <div class="space-y-3 text-[#B0B0B0] text-sm">
+                    <p>Vidrios de pantalla</p>
+                    <p>Protectores de cámara</p>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-[#1E88E5] font-bold text-sm mb-4 tracking-widest">CASES PREMIUM</h3>
+                <div class="space-y-3 text-[#B0B0B0] text-sm">
+                    <p>Fundas iPhone</p>
+                    <p>Fundas Samsung</p>
+                    <p>Fundas iPad</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="menu-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[90] hidden" onclick="closeMenu()"></div>
+
+</body>
+</html>
